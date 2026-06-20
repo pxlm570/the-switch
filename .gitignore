@@ -13,12 +13,18 @@ title.yaml
 test_*.js
 record_demo.js
 
-# 文档类
-*.md
+# 文档类（README 除外）
 *.pptx
 *.pdf
 poster.jpg
 package.json
+# 排除非 README 的 md 文件
+demo_script.md
+作品描述.md
+作品介绍.md
+前期规划.md
+活动总结.md
+设计文档.md
 
 # 多余图片
 assets/ui/
