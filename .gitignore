@@ -12,3 +12,14 @@ page.html
 title.yaml
 test_*.js
 record_demo.js
+
+# 文档类
+*.md
+*.pptx
+*.pdf
+poster.jpg
+package.json
+
+# 多余图片
+assets/ui/
+assets/chars/sam.png
