@@ -1,0 +1,14 @@
+node_modules/
+generated-images/
+test-results/
+demo-screenshots/
+.claude/
+.playwright-cli/
+.codebuddy/
+audio/
+package-lock.json
+*.py
+page.html
+title.yaml
+test_*.js
+record_demo.js

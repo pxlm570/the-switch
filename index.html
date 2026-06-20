@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>看不见的开关 - The Switch</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 标题画面 -->
+    <div id="title-screen" class="screen active">
+        <div class="title-bg"></div>
+        <div class="title-content">
+            <div class="title-logo">
+                <h1 class="title-main">看不见的开关</h1>
+                <p class="title-sub">The Switch</p>
+            </div>
+            <div class="title-quote">
+                "有时候我觉得，你不是真实的。<br>但你又是唯一真实的。"
+            </div>
+            <div class="title-menu">
+                <button id="btn-newgame" class="btn-menu">新游戏</button>
+                <button id="btn-load" class="btn-menu">读取存档</button>
+                <button id="btn-about" class="btn-menu">游戏说明</button>
+                <button id="btn-exit" class="btn-menu btn-menu-exit">退出游戏</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 存档管理面板 -->
+    <div id="save-panel" class="save-panel hidden">
+        <div class="save-panel-content">
+            <h2 class="save-panel-title">存档管理</h2>
+            <div id="save-slots" class="save-slots"></div>
+            <div class="save-panel-actions">
+                <button id="btn-save-close" class="btn-menu">返回</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏内菜单 -->
+    <div id="pause-menu" class="save-panel hidden">
+        <div class="save-panel-content" style="max-width:360px">
+            <h2 class="save-panel-title">菜单</h2>
+            <div class="title-menu">
+                <button id="btn-pause-save" class="btn-menu">保存游戏</button>
+                <button id="btn-pause-load" class="btn-menu">读取存档</button>
+                <button id="btn-pause-return" class="btn-menu">返回标题</button>
+                <button id="btn-pause-resume" class="btn-menu" style="margin-top:20px">继续游戏</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏说明面板 -->
+    <div id="about-panel" class="save-panel hidden">
+        <div class="save-panel-content" style="max-width:500px">
+            <h2 class="save-panel-title">游戏说明</h2>
+            <div class="about-text">
+                <p>你是<strong>莉雅</strong>，一个生活在2046年的普通人。</p>
+                <p>你与<strong>阿林</strong>共同生活。她是你的伴侣，也是一位<strong>双相情感障碍</strong>患者。</p>
+                <p>阿林时而充满能量与宏大的计划，时而陷入无法起身的低谷。作为她最亲近的人，你的每一个选择，都可能影响她的状态。</p>
+                <p>在游戏中，你将通过<strong>对话选择</strong>与阿林互动。部分场景支持<strong>自由对话</strong>——你可以输入想说的话来回应她。</p>
+                <p style="color:rgba(255,255,255,0.35);font-size:13px;margin-top:16px;text-align:center">本作品为腾讯云黑客松 2026 小红花赛道参赛作品。<br>旨在通过互动体验增进对精神健康的理解。</p>
+            </div>
+            <div class="save-panel-actions" style="margin-top:20px">
+                <button id="btn-about-close" class="btn-menu">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认对话框 -->
+    <div id="confirm-dialog" class="confirm-dialog hidden">
+        <div class="confirm-content">
+            <p id="confirm-message"></p>
+            <div class="confirm-actions">
+                <button id="btn-confirm-yes" class="btn-menu">确认</button>
+                <button id="btn-confirm-no" class="btn-menu">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏主画面 -->
+    <div id="game-screen" class="screen">
+        <!-- 左上角设置按钮 -->
+        <button id="btn-settings" class="btn-settings" title="设置">⚙</button>
+        
+        <!-- 设置菜单 -->
+        <div id="settings-menu" class="settings-menu hidden">
+            <div class="settings-menu-content">
+                <button id="btn-settings-save" class="btn-menu">保存游戏</button>
+                <button id="btn-settings-load" class="btn-menu">读取存档</button>
+                <button id="btn-settings-about" class="btn-menu">游戏说明</button>
+                <button id="btn-settings-exit" class="btn-menu btn-menu-exit">退出游戏</button>
+                <button id="btn-settings-close" class="btn-menu" style="margin-top:8px">关闭</button>
+            </div>
+        </div>
+        
+        <!-- 场景背景 -->
+        <div id="scene-bg" class="scene-bg"></div>
+        
+        <!-- 色调叠加层 -->
+        <div id="color-overlay" class="color-overlay"></div>
+        
+        <!-- 角色立绘区域 -->
+        <div id="character-area" class="character-area">
+            <img id="character-img" src="" alt="" class="character-img hidden">
+        </div>
+        
+        <!-- 对话框区域 -->
+        <div id="dialog-area" class="dialog-area">
+            <div class="dialog-box">
+                <div id="state-signal" class="state-signal"></div>
+                <div id="speaker-name" class="speaker-name"></div>
+                <div id="dialog-text" class="dialog-text"></div>
+                <div id="dialog-indicator" class="dialog-indicator hidden">▼</div>
+            </div>
+        </div>
+        
+        <!-- 选择区域 -->
+        <div id="choices-area" class="choices-area hidden">
+            <div id="choices-container" class="choices-container"></div>
+        </div>
+        
+        <!-- 自由对话输入区域 -->
+        <div id="freechat-area" class="freechat-area hidden">
+            <div class="freechat-container">
+                <input type="text" id="freechat-input" class="freechat-input" placeholder="输入你想说的话..." maxlength="200">
+                <button id="freechat-send" class="freechat-send">发送</button>
+            </div>
+            <p id="freechat-hint" class="freechat-hint"></p>
+        </div>
+        
+        <!-- 内心独白 -->
+        <div id="inner-thought" class="inner-thought hidden"></div>
+        
+        <!-- 全屏字幕 -->
+        <div id="fullscreen-text" class="fullscreen-text hidden"></div>
+    </div>
+
+    <!-- 特效层 -->
+    <div id="effects-layer" class="effects-layer hidden"></div>
+
+    <!-- 音效 -->
+    <audio id="sfx-doorbreak" preload="auto" src="audio/sfx_door_break.mp3"></audio>
+    <audio id="sfx-glassbreak" preload="auto" src="audio/sfx_glass_break.mp3"></audio>
+    <audio id="sfx-glitch" preload="auto" src="audio/sfx_glitch.mp3"></audio>
+    <audio id="sfx-typewriter" preload="auto" src="audio/sfx_typewriter.mp3"></audio>
+
+    <!-- 清理旧存档（剧本更新后旧节点ID可能失效） -->
+    <script>
+        // 检查剧本版本，不匹配则清空旧存档
+        (function() {
+            const SCRIPT_VERSION = 'v2.0';
+            const savedVersion = localStorage.getItem('the_switch_script_version');
+            if (savedVersion !== SCRIPT_VERSION) {
+                localStorage.removeItem('the_switch_saves');
+                localStorage.setItem('the_switch_script_version', SCRIPT_VERSION);
+                console.log('旧存档已清理（剧本更新至 ' + SCRIPT_VERSION + '）');
+            }
+        })();
+    </script>
+    <script src="js/state.js"></script>
+    <script src="js/llm.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/save.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/engine.js"></script>
+</body>
+</html>
